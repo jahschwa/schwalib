@@ -29,7 +29,7 @@ def who():
   return users
 
 def inany(keys,s):
-  """return true if any key is in s"""
+  """return true if any key in the list keys is in s"""
   
   for key in keys:
     if key in s:
@@ -37,7 +37,7 @@ def inany(keys,s):
   return False
 
 def findinlist(s,l,start=0,stop=-1):
-  """return the index of the first instance of s in l"""
+  """return the index of the first instance of strign s in list l"""
 
   if stop==-1:
     stop = len(l)
@@ -47,7 +47,7 @@ def findinlist(s,l,start=0,stop=-1):
   return (-1,None)
 
 def findallinlist(s,l,start=0,stop=-1):
-  """return a list of indices of s in l"""
+  """return a list of indices of string s in list l"""
 
   if stop==-1:
     stop = len(l)
