@@ -36,17 +36,20 @@ def inany(keys,s):
       return True
   return False
 
-def findinlist(s,l,start=0,stop=-1):
+def findinlist(s,l,start=0,stop=-1,ignorecase=False):
   """return the index of the first instance of strign s in list l"""
 
   if stop==-1:
     stop = len(l)
   for (i,x) in enumerate(l[start:stop]):
+    if ignorecase:
+      x = x.lower()
+      s = s.lower()
     if s in x:
       return (i+start,x.find(s))
   return (-1,None)
 
-def findallinlist(s,l,start=0,stop=-1):
+def findallinlist(s,l,start=0,stop=-1,ignorecase=False):
   """return a list of indices of string s in list l"""
 
   if stop==-1:
@@ -54,7 +57,7 @@ def findallinlist(s,l,start=0,stop=-1):
   found = []
   current = start
   while True:
-    (i,x) = findinlist(s,l,current)
+    (i,x) = findinlist(s,l,current,ignorecase=ignorecase)
     if i==-1 or i>=stop:
       break
     found.append((i,x))
