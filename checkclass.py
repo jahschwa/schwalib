@@ -7,21 +7,30 @@
 # Author: Joshua A Haas
 
 import time,urllib2,sys
-import webpage,emailer,prettytime
+import webpage,prettytime
 
-WAIT = 60
-ADDR = '9083997913@vtext.com'
-URL = 'https://adminweb.rowan.edu/PROD/bwckschd.p_disp_detail_sched?term_in=201520&crn_in=23324'
-LOGFILE = '/home/laptopdude/bin/checkclass.log'
+from emailer import Emailer
 
-while True:
-    with open(LOGFILE,'r') as f:
+class checker:
+  
+  def __init__(self,emailer,addr,url,log='checkclass.log',wait=60):
+    
+    self.emailer = emailer
+    self.addr = addr
+    self.url = url
+    self.log = log
+    self.wait = 60
+
+  def run(self):
+
+    while True:
+      with open(self.log,'r') as f:
         old = int(f.read().rstrip())
-    lines = webpage.get(URL)
-    if lines is None:
-        emailer.send('ERROR: webpage None',ADDR)
+      lines = webpage.get(self.url)
+      if lines is None:
+        emailer.send('ERROR: webpage None',self.addr)
         sys.exit()
-    try:
+      try:
         remainline = lines[123]
         start = remainline.find(">")
         end = remainline.find("<",start+1)
@@ -30,12 +39,12 @@ while True:
         t = prettytime.gettimestr()
         print(t+' - Remaining: '+str(remain))
         if remain != old:
-             emailer.send('Embedded\nOld: '+str(old)+'\nNew: '+str(remain),ADDR)
-             with open(LOGFILE,'w') as f:
-                 f.write(str(remain))
-        time.sleep(WAIT)
-    except KeyboardInterrupt:
+           emailer.send('Embedded\nOld: '+str(old)+'\nNew: '+str(remain),self.addr)
+           with open(self.log,'w') as f:
+             f.write(str(remain))
+        time.sleep(self.wait)
+      except KeyboardInterrupt:
         sys.exit()
-    except:
-        emailer.send('ERROR: unknown',ADDR)
+      except:
+        emailer.send('ERROR: unknown',self.addr)
         sys.exit()
