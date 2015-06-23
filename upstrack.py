@@ -5,27 +5,35 @@
 # Author: Joshua A Haas
 
 import re,time,sys
-import webpage,emailer,prettytime
+import webpage,prettytime
 
-TRACK_NUM = '1ZY511170379208407'
-ADDR = '9083997913@vtext.com'
+def Tracker:
 
-url = 'http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=' + \
-    TRACK_NUM + '&loc=en_us'
-infile = open('upstrack.txt','r')
-old = infile.read()
-infile.close()
+  def __init__(self,emailer,addr,tracknum,log='upstrack.txt'):
+    
+    self.emailer = emailer
+    self.addr = addr
+    self.tracknum = tracknum
+    self.log = log
+    
+    self.URL = ('http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=' +
+        self.tracknum + '&loc=en_us')
 
-while True:
-    """if the most recent status has changed
-    for the TRACK_NUM send an email to ADDR
-    """
+  def run(self):
+    
+    infile = open(self.log,'r')
+    old = infile.read()
+    infile.close()
 
-    try:
+    while True:
+      """if the most recent status has changed
+      for the tracknum send an email to addr"""
+      
+      try:
         success = False
         while not success:
-            lines = webpage.get(url)
-            success = lines is not None
+          lines = webpage.get(self.url)
+          success = lines is not None
         page = '\n'.join(lines)
 
         start = page.find('Activity')
@@ -39,20 +47,20 @@ while True:
         new = newdate + ' ' + newtime
         matchobj = re.search('<td>(.*)$',page[start:],re.M)
         activity = matchobj.group(1)
-
+        
         t = prettytime.gettimestr()
 
         if old!=new:
-            print t + ' - ' + activity + ' - ' + new
-            outfile = open('upstrack.txt','w')
-            outfile.write(new)
-            outfile.close()
-            old = new
-            emailer.send(ADDR,activity)
+          print t + ' - ' + activity + ' - ' + new
+          outfile = open(self.log,'w')
+          outfile.write(new)
+          outfile.close()
+          old = new
+          emailer.send(activity,self.addr)
         else:
-            print t
+          print t
 
         time.sleep(60)
-    except:
-        emailer.send(ADDR,'Error')
+      except:
+        emailer.send('Error',self.addr)
         sys.exit()

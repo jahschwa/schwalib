@@ -9,9 +9,7 @@
 import time,urllib2,sys
 import webpage,prettytime
 
-from emailer import Emailer
-
-class checker:
+class Checker:
   
   def __init__(self,emailer,addr,url,log='checkclass.log',wait=60):
     
