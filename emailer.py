@@ -7,38 +7,59 @@
 import smtplib,imaplib
 from email.mime.text import MIMEText
 
-def send(text,addr):
-    """send an e-mail with body 'text' to addr"""
+class Emailer:
 
+  def __init__(self,username,password,smtp=None,port=465,imap=None):
+    """create a new Emailer that will login to the given account"""
+    
+    self.smtp = smtp
+    self.user = username
+    self.pword = password
+    self.port = port
+    self.iserv = imap
+    self.imap = None
+
+  def send(self,text,addr):
+    """send an e-mail with body 'text' to addr"""
+      
     msg = MIMEText(text)
     
     msg['Subject'] = 'Python'
-    msg['From'] = 'smartoutletbbb@gmail.com'
+    msg['From'] = self.user
     msg['To'] = addr
-
-    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server.login('smartoutletbbb@gmail.com', 'homeautomation')
-    server.sendmail('smartoutletbbb', addr, msg.as_string())
+    
+    server = smtplib.SMTP_SSL(self.smtp,self.port)
+    server.login(self.user,self.pword)
+    server.sendmail(self.user.split('@')[0], addr, msg.as_string())
     server.quit()
 
-def connect(s,u,p):
+  def connect(self):
     """return an imap connection"""
 
-    imap_conn = imaplib.IMAP4_SSL(s)
-    imap_conn.login(u,p)
-    imap_conn.select()
-    return imap_conn
+    self.imap = imaplib.IMAP4_SSL(self.iserv)
+    self.imap.login(self.user,self.pword)
+    self.imap.select()
 
-def getmsg(imap_conn):
+  def disconnect(self):
+    """end the imap connection"""
+    
+    self.imap.close()
+    self.imap.logout()
+    self.imap = None
+
+  def getmsg(self):
     """return (body,sender) for the most recent email
     or None if there are no emails
     """
-
-    imap_conn.recent()
-    (typ, data) = imap_conn.search(None, 'ALL')
+    
+    if self.imap is None:
+      self.connect()
+    
+    self.imap.recent()
+    (typ, data) = self.imap.search(None, 'ALL')
     if data[0] == '':
         return None
-    (typ, data) = imap_conn.fetch(1,'(RFC822)')
+    (typ, data) = self.imap.fetch(1,'(RFC822)')
     msg = data[0][1].split('\r\n\r\n')
     
     index = 0
@@ -61,9 +82,9 @@ def getmsg(imap_conn):
 
     return (body,sender)
 
-def delmsg(imap_conn):
+  def delmsg(self):
     """delete the most recent email"""
 
-    imap_conn.store(1,'+FLAGS','\\Deleted')
-    imap_conn.expunge()
+    self.imap.store(1,'+FLAGS','\\Deleted')
+    self.imap.expunge()
 
