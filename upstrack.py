@@ -7,7 +7,7 @@
 import re,time,sys
 import webpage,prettytime
 
-def Tracker:
+class Tracker:
 
   def __init__(self,emailer,addr,tracknum,log='upstrack.txt'):
     
