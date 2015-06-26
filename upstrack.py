@@ -60,11 +60,11 @@ class Tracker:
           outfile.write(new)
           outfile.close()
           old = new
-          emailer.send(activity,self.addr)
+          self.emailer.send(activity,self.addr)
         else:
           print t
 
         time.sleep(60)
       except:
-        emailer.send('Error',self.addr)
+        self.emailer.send('Error',self.addr)
         sys.exit()
