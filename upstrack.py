@@ -21,9 +21,13 @@ class Tracker:
 
   def run(self):
     
-    infile = open(self.log,'r')
-    old = infile.read()
-    infile.close()
+    try:
+      with open(self.log,'r') as f:
+        old = f.read()
+    except IOError:
+      old = ''
+      with open(self.log,'w') as f:
+        f.write(old)
 
     while True:
       """if the most recent status has changed
