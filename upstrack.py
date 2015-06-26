@@ -36,7 +36,7 @@ class Tracker:
       try:
         success = False
         while not success:
-          lines = webpage.get(self.url)
+          lines = webpage.get(self.URL)
           success = lines is not None
         page = '\n'.join(lines)
 
