@@ -9,7 +9,7 @@ import webpage,prettytime
 
 class Tracker:
 
-  def __init__(self,emailer,addr,tracknum,log='upstrack.txt'):
+  def __init__(self,emailer,addr,tracknum,log='upstrack.log'):
     
     self.emailer = emailer
     self.addr = addr
@@ -65,6 +65,8 @@ class Tracker:
           print t
 
         time.sleep(60)
-      except:
+      except Exception as e:
         self.emailer.send('Error',self.addr)
+        with open(self.log,'w') as f:
+          f.write(str(e))
         sys.exit()
