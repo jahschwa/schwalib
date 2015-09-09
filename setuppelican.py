@@ -21,7 +21,7 @@ def main(username):
       sitename = raw_input('Title for the blog: ').replace("'","\\\'")
       newlines.append("SITENAME = u'"+sitename+"'")
     elif 'SITEURL' in l:
-      newlines.append("SITEURL = '"+"http://grandline.terracrypt.net/~"+username+"/blog'")
+      newlines.append("SITEURL = '"+"http://grandline.jahschwa.com/~"+username+"/blog'")
     elif 'TIMEZONE' in l:
       newlines.append("TIMEZONE = 'US/Eastern'")
       newlines.append("DATE_FORMATS = {'en':'%a %Y-%m-%d'}");
