@@ -19,12 +19,14 @@ class Emailer:
     self.iserv = imap
     self.imap = None
 
-  def send(self,text,addr):
+  def send(self,text,addr,sub=None):
     """send an e-mail with body 'text' to addr"""
       
     msg = MIMEText(text)
     
-    msg['Subject'] = 'Python'
+    if sub is None:
+      sub = 'Python'
+    msg['Subject'] = sub
     msg['From'] = self.user
     msg['To'] = addr
     
