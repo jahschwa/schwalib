@@ -5,7 +5,12 @@
 # Author: Joshua A Haas
 
 import os
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen, TimeoutExpired
+
+class ProcessError(Exception):
+  def __init__(self, message, code):
+    super().__init__(message)
+    self.code = code
 
 def get_users():
   """return a list of users"""
@@ -15,13 +20,42 @@ def get_users():
   users.sort(key=str.lower)
   return users
 
+def run(cmd, stdin=None, timeout=None, strip=True, lines=False, check=False,
+  encoding='utf8', **kwargs):
+  """run a bash command; unknown kwargs are passed to Popen()"""
+
+  kwargs['encoding'] = encoding
+
+  p = Popen(cmd, stdin=(PIPE if stdin else None),
+    stdout=PIPE, stderr=PIPE, **kwargs)
+  try:
+    result = list(p.communicate(stdin, timeout))
+  except TimeoutExpired:
+    p.kill()
+    raise
+
+  for (i, _) in enumerate(result):
+    if strip:
+      result[i] = result[i].strip()
+
+    if lines:
+      result[i] = [(l.strip() if strip else l) for l in result[i].split('\n')]
+
+  code = p.returncode
+  if check and code != 0:
+    raise ProcessError('non-zero exit status: %s' % code, code)
+
+  return (result[0], result[1], code)
+
+def do(*args, **kwargs):
+
+  return run(*args, **kwargs)[0]
+
 def who():
   """return a list of logged in users"""
 
-  p = Popen('who', stdout=PIPE, stderr=PIPE)
-  (out, err) = p.communicate()
-  out = out.strip()
-  users = [l[:l.find(' ')] for l in out.split('\n')]
+  out = do('who', lines=True)
+  users = [l[:l.find(' ')] for l in out]
   users = list(set(users))
   if '' in users:
     users.remove('')
