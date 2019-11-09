@@ -18,10 +18,10 @@ def totimestr(t):
     for time_structs or seconds since linux epoch
     """
 
-    if isinstance(t,float):
+    if isinstance(t, float):
         t = time.localtime(t)
 
-    return time.strftime(TIMEFORMAT,t)
+    return time.strftime(TIMEFORMAT, t)
 
 def gettimestr():
     """return the current local time as a string"""
@@ -35,18 +35,18 @@ def getdiff(now,then):
     will be negative if then is later than now
     """
 
-    if not isinstance(now,float):
+    if not isinstance(now, float):
         now = time.mktime(now)
-    if not isinstance(then,float):
+    if not isinstance(then, float):
         then = time.mktime(then)
-    return now-then
+    return now - then
 
 def getdiffnow(then):
     """same as getdiff() but subtract then from
     the current time
     """
 
-    return getdiff(time.time(),then)
+    return getdiff(time.time(), then)
 
 def getdiffstr(now,then):
     """return the difference between the two times
@@ -54,34 +54,34 @@ def getdiffstr(now,then):
     than one minute it returns 'now'
     """
 
-    secs = getdiff(now,then)
-    mins = int(secs/60)
-    hours = int(mins/60)
-    days = int(hours/24)
-    mons = int(days/30)
-    years = int(days/365)
+    secs = getdiff(now, then)
+    mins = int(secs / 60)
+    hours = int(mins / 60)
+    days = int(hours / 24)
+    mons = int(days / 30)
+    years = int(days / 365)
 
-    if years>0:
+    if years > 0:
         num = years
         nam = 'year'
-    elif mons>0:
+    elif mons > 0:
         num = mons
         nam = 'month'
-    elif days>0:
+    elif days > 0:
         num = days
         nam = 'day'
-    elif hours>0:
+    elif hours > 0:
         num = hours
         nam = 'hour'
-    elif mins>0:
+    elif mins > 0:
         num = mins
         nam = 'min'
     else:
         return 'now'
 
-    s = str(num)+' '+nam
-    if num>1:
-        s = s+'s'
+    s = str(num) + ' ' + nam
+    if num > 1:
+        s = s + 's'
     return s
 
 def getdiffnowstr(then):
@@ -89,7 +89,7 @@ def getdiffnowstr(then):
     from the current time
     """
 
-    return getdiffstr(time.time(),then)
+    return getdiffstr(time.time(), then)
 
 def mon2str(month):
     """return the name of the month of the
@@ -98,7 +98,7 @@ def mon2str(month):
 
     months = ['January','February','March','April','May','June','July',
         'August','September','October','November','December']
-    return months[month-1]
+    return months[month - 1]
 
 def mon2abrev(month):
     """as mon2str() but truncate to 3 letters"""
@@ -112,8 +112,8 @@ def str2mon(month):
     is also case insensitive
     """
 
-    months = ['january','february','march','april','may','june','july',
-        'august','september','october','november','december']
+    months = ['january', 'february', 'march', 'april', 'may', 'june', 'july',
+        'august', 'september', 'october', 'november', 'december']
     return [e for (e,m) in enumerate(months) if month.lower() in m][0]+1
 
 def str2time(t):
@@ -121,7 +121,7 @@ def str2time(t):
     string t
     """
 
-    return time.strptime(t,TIMEFORMAT)
+    return time.strptime(t, TIMEFORMAT)
 
 if __name__ == '__main__':
     print gettimestr()

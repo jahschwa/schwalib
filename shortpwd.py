@@ -20,12 +20,12 @@ def shorten(pwd):
     homedir = os.path.expanduser('~')
     pwd = pwd.replace(homedir, '~', 1)
 
-    first = pwd.find('/',1)
-    second = pwd.find('/',first+1)
+    first = pwd.find('/', 1)
+    second = pwd.find('/', first + 1)
     last = pwd.rfind('/')
 
-    if first>-1 and second>-1:
-        pwd = pwd[:first+1]+'...'+pwd[last:]
+    if first > -1 and second > -1:
+        pwd = pwd[:first + 1] + '...' + pwd[last:]
     return pwd
 
 if __name__ == '__main__':

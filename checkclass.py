@@ -6,12 +6,16 @@
 #
 # Author: Joshua A Haas
 
-import time,urllib2,sys
-import webpage,prettytime
+import sys
+import time
+import urllib2
+
+import prettytime
+import webpage
 
 class Checker:
   
-  def __init__(self,emailer,addr,url,log='checkclass.log',wait=60):
+  def __init__(self, emailer, addr, url, log='checkclass.log', wait=60):
     
     self.emailer = emailer
     self.addr = addr
@@ -22,27 +26,27 @@ class Checker:
   def run(self):
 
     while True:
-      with open(self.log,'r') as f:
+      with open(self.log, 'r') as f:
         old = int(f.read().rstrip())
       lines = webpage.get(self.url)
       if lines is None:
-        emailer.send('ERROR: webpage None',self.addr)
+        emailer.send('ERROR: webpage None', self.addr)
         sys.exit()
       try:
         remainline = lines[123]
         start = remainline.find(">")
-        end = remainline.find("<",start+1)
+        end = remainline.find("<", start+1)
         remainstr = remainline[start+1:end]
         remain = int(remainstr)
         t = prettytime.gettimestr()
-        print(t+' - Remaining: '+str(remain))
+        print(t + ' - Remaining: ' + str(remain))
         if remain != old:
-           emailer.send('Embedded\nOld: '+str(old)+'\nNew: '+str(remain),self.addr)
-           with open(self.log,'w') as f:
+           emailer.send('Embedded\nOld: ' + str(old) + '\nNew: ' + str(remain), self.addr)
+           with open(self.log, 'w') as f:
              f.write(str(remain))
         time.sleep(self.wait)
       except KeyboardInterrupt:
         sys.exit()
       except:
-        emailer.send('ERROR: unknown',self.addr)
+        emailer.send('ERROR: unknown', self.addr)
         sys.exit()
