@@ -4,9 +4,20 @@
 #
 # Author: Joshua A Haas
 
+import datetime as dt
 import time
 
 TIMEFORMAT = '%Y/%m/%d - %H:%M:%S'
+
+def strftime(d):
+    """convert given datetime to a string"""
+
+    return d.strftime(TIMEFORMAT)
+
+def strptime(s):
+    """convert a string to a datetime"""
+
+    return dt.datetime(s, TIMEFORMAT)
 
 def gettime():
     """returns the local time_struct"""
