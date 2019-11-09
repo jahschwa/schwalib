@@ -12,6 +12,11 @@ class ProcessError(Exception):
     super().__init__(message)
     self.code = code
 
+def pwd(f):
+  """return the directory of the current file"""
+
+  return os.path.dirname(os.path.realpath(f))
+
 def get_users():
   """return a list of users"""
 
