@@ -17,7 +17,7 @@ def strftime(d):
 def strptime(s):
     """convert a string to a datetime"""
 
-    return dt.datetime(s, TIMEFORMAT)
+    return dt.datetime.strptime(s, TIMEFORMAT)
 
 def gettime():
     """returns the local time_struct"""
@@ -135,4 +135,4 @@ def str2time(t):
     return time.strptime(t, TIMEFORMAT)
 
 if __name__ == '__main__':
-    print gettimestr()
+    print(gettimestr())
