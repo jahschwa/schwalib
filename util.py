@@ -53,6 +53,7 @@ def run(cmd, stdin=None, timeout=None, strip=True, lines=False, check=False,
   return (result[0], result[1], code)
 
 def do(*args, **kwargs):
+  """run a bash command; as run() but only return stdout"""
 
   return run(*args, **kwargs)[0]
 
