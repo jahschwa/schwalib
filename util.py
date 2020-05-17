@@ -70,7 +70,7 @@ def who():
 
 def in_any(keys, s):
   """return true if any key in the list keys is in s"""
-  
+
   for key in keys:
     if key in s:
       return True
@@ -81,7 +81,7 @@ def find_in_list(s, l, start=0, stop=-1, ignore_case=False):
 
   if stop == -1:
     stop = len(l)
-  for (i,x) in enumerate(l[start:stop]):
+  for (i, x) in enumerate(l[start:stop]):
     if ignorecase:
       x = x.lower()
       s = s.lower()
@@ -97,7 +97,7 @@ def find_all_in_list(s, l, start=0, stop=-1, ignore_case=False):
   found = []
   current = start
   while True:
-    (i,x) = find_in_list(s, l, current, ignore_case=ignore_case)
+    (i, x) = find_in_list(s, l, current, ignore_case=ignore_case)
     if i == -1 or i >= stop:
       break
     found.append((i, x))
@@ -115,7 +115,7 @@ def list_to_str(l):
 def list_dir(path):
   """list files recursively"""
 
-  allfiles = []                                                               
+  allfiles = []
   for (cur_path, dirnames, filenames) in os.walk(path):
     for filename in filenames:
       allfiles.append(os.path.join(cur_path, filename))
@@ -141,7 +141,7 @@ def check_dict(d, keys):
 
 def update_dict(old, new):
   """update the values in old with those in new"""
-  
+
   for key in new.keys():
     if key not in old.keys():
       raise KeyError('The key "' + key + ' is invalid')
@@ -161,7 +161,7 @@ def fill_args(opts, default):
 
 def matrix(rows, cols, value=None):
   """create a list of lists with all cells set to value"""
-    
+
   mat = []
   for i in range(0, rows):
     row = []
@@ -172,6 +172,40 @@ def matrix(rows, cols, value=None):
 
 def replace_all(s, olds, new):
   """replace all elements in olds with new in string s"""
-  
+
   for old in olds:
     s.replace(old, new)
+
+def justify(l, sep=' | ', align_right=False,
+  div_rows=None, div='-', div_sep='+'):
+  """return a list of strings with justified columns"""
+
+  if isinstance(align_right, bool):
+    align_right = [align_right] * len(l[0])
+
+  if div_rows is None:
+    div_rows = []
+  elif isinstance(div_rows, int):
+    div_rows = [div_rows]
+
+  l = [[str(x) for x in line] for line in l]
+  maxes = [len(max(x, key=len)) for x in zip(*l)]
+  fmt = sep.join(
+    '%{}{}s'.format('' if a else '-', m)
+    for (m, a) in zip(maxes, align_right)
+  )
+
+  result = [fmt % tuple(x) for x in l]
+
+  if div_rows:
+    diff = len(sep) - len(div_sep)
+    a = diff // 2
+    b = diff - a
+    div_sep = div * a + div_sep + div * b
+    div_str = div_sep.join(div * m for m in maxes)
+    offset = 0
+    for row in div_rows:
+      result.insert(row + offset, div_str)
+      offset += 1
+
+  return result
