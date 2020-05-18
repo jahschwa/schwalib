@@ -45,6 +45,8 @@ def run(cmd, stdin=None, timeout=None, strip=True, lines=False, check=False,
 
     if lines:
       result[i] = [(l.strip() if strip else l) for l in result[i].split('\n')]
+      if len(result[i]) and all(not len(l) for l in result[i]):
+        result[i] = []
 
   code = p.returncode
   if check and code != 0:
