@@ -179,7 +179,7 @@ def replace_all(s, olds, new):
     s.replace(old, new)
 
 def justify(l, sep=' | ', align_right=False,
-  div_rows=None, div='-', div_sep='+'):
+  div_rows=None, div='-', div_sep='+', to_str=True):
   """return a list of strings with justified columns"""
 
   if isinstance(align_right, bool):
@@ -210,4 +210,4 @@ def justify(l, sep=' | ', align_right=False,
       result.insert(row + offset, div_str)
       offset += 1
 
-  return result
+  return '\n'.join(result) if to_str else result
