@@ -4,9 +4,12 @@
 #
 # Author: Joshua A Haas, Jonathan E Frederickson
 
-import imaplib
-import smtplib
+from email.mime.application import MIMEApplication
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import imaplib
+import os
+import smtplib
 
 class Emailer:
 
@@ -26,16 +29,34 @@ class Emailer:
 
     self.imap = None
 
-  def send(self, text, addr, sub=None):
+  def send(self, text, addr, sub=None, attach=None):
     """send an e-mail with body 'text' to addr"""
 
-    msg = MIMEText(text)
+    if attach is None:
+      attach = []
+    if isinstance(attach, str):
+      attach = [attach]
+    try:
+      iter(attach)
+    except:
+      attach = [attach]
+
+    msg = MIMEMultipart()
 
     if sub is None:
       sub = 'Python'
     msg['Subject'] = sub
     msg['From'] = self.user
     msg['To'] = addr
+
+    msg.attach(MIMEText(text))
+
+    for fname in attach:
+      base = os.path.basename(fname)
+      with open(fname, 'rb') as f:
+        part = MIMEApplication(f.read(), Name=base)
+      part['Content-Disposition'] = 'attachment; filename="{}"'.format(base)
+      msg.attach(part)
 
     if self.starttls:
       server = smtplib.SMTP(self.smtp, self.port)
