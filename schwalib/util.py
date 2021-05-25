@@ -211,3 +211,31 @@ def justify(l, sep=' | ', align_right=False,
       offset += 1
 
   return '\n'.join(result) if to_str else result
+
+# @param s (str)
+# @param chunk (int) [3] number of characters per group
+# @param sep (str) [','] the character to place between groups
+# @param left (bool) [False] start counting from the left instead of the right
+# @param split_char (str) ['.'] character to use to split the input
+# @param split_index (int) [0] index to act on after splitting
+def group(s, chunk=3, sep=',', left=False, split_char='.', split_index=0):
+  """group a string; by default, does thousands-separation"""
+
+  x = s = str(s)
+  if split_char and split_char in s:
+    s = s.split(split_char)
+    x = s[split_index]
+
+  new = ''
+  i = 0
+  offset = 0 if left else (chunk - len(x) % chunk) % chunk
+  while i < len(x):
+    if (i + offset) % chunk == 0:
+      new += sep
+    new += x[i]
+    i += 1
+  new = new.strip(sep)
+
+  if isinstance(s, list):
+    return split_char.join(s[:split_index] + [new] + s[split_index+1:])
+  return new
