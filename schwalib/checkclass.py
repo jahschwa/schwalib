@@ -8,15 +8,14 @@
 
 import sys
 import time
-import urllib2
 
 import prettytime
 import webpage
 
 class Checker:
-  
+
   def __init__(self, emailer, addr, url, log='checkclass.log', wait=60):
-    
+
     self.emailer = emailer
     self.addr = addr
     self.url = url

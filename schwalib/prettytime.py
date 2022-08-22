@@ -113,7 +113,7 @@ def mon2str(month):
 
 def mon2abrev(month):
     """as mon2str() but truncate to 3 letters"""
-    
+
     return mon2str(month)[:3]
 
 def str2mon(month):

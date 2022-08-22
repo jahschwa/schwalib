@@ -9,7 +9,6 @@
 # Author: Joshua A Haas
 
 import os
-from commands import getoutput
 from socket import gethostname
 
 def shorten(pwd):
@@ -32,4 +31,4 @@ if __name__ == '__main__':
     hostname = gethostname()
     username = os.environ['USER']
     pwd = os.getcwd()
-    print '[%s@%s:%s] ' % (username, hostname, shorten(pwd))
+    print('[%s@%s:%s] ' % (username, hostname, shorten(pwd)))

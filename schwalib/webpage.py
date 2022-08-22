@@ -4,7 +4,7 @@
 #
 # Author: Joshua A Haas
 
-import urllib2
+from urllib import request
 
 def get(url):
     """return the webpage as a list of strings
@@ -12,9 +12,9 @@ def get(url):
 
     user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0'
     headers = {'User-Agent': user_agent}
-    req = urllib2.Request(url, None, headers);
+    req = request.Request(url, None, headers);
     try:
-        response = urllib2.urlopen(req)
+        response = request.urlopen(req)
         page = response.read()
         return page.split('\n')
     except:

@@ -134,18 +134,18 @@ def blank_dict(keys):
 def check_dict(d, keys):
   """make sure the dict d has all keys in keys"""
 
-  if len(keys) != len(d.keys()):
+  if len(keys) != len(d):
     raise KeyError('Input dict has wrong number of keys')
 
   for key in keys:
-    if key not in d.keys():
+    if key not in d:
       raise KeyError('Input dict is missing the key "' + key)
 
 def update_dict(old, new):
   """update the values in old with those in new"""
 
-  for key in new.keys():
-    if key not in old.keys():
+  for key in list(new.keys()):
+    if key not in list(old.keys()):
       raise KeyError('The key "' + key + ' is invalid')
     old[key] = new[key]
   return old
